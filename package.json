@@ -1,4 +1,14 @@
 {
+  "name": "support_desk",
+  "version": "1.0.0",
+  "description": "Support tickets system",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js"
+  },
+  "author": "Alex Ejimkaraonye",
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
