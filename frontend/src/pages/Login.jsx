@@ -3,6 +3,9 @@ import { FaSignInAlt } from "react-icons/fa";
 import { MdVisibility } from "react-icons/md";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+
+import { login } from "../features/auth/authSlice";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +15,10 @@ const Login = () => {
   });
 
   const { email, password } = formData;
+
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isSuccess, message } = useSelector(state => state.auth);
 
   const onChange = e => {
     setFormData(prevState => ({
@@ -23,7 +30,12 @@ const Login = () => {
   const onSubmit = e => {
     e.preventDefault();
 
-    
+    const userData = {
+      email,
+      password,
+    };
+
+    dispatch(login(userData));
   };
 
   return (

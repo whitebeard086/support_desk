@@ -3,6 +3,9 @@ import { FaUser } from "react-icons/fa";
 import { MdVisibility } from "react-icons/md";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+
+import { register } from "../features/auth/authSlice";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +18,10 @@ const Register = () => {
 
   const { name, email, password, passwordConfirm } = formData;
 
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isSuccess, message } = useSelector(state => state.auth);
+
   const onChange = e => {
     setFormData(prevState => ({
       ...prevState,
@@ -23,12 +30,20 @@ const Register = () => {
   };
 
   const onSubmit = e => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (password !== passwordConfirm) {
-      toast.error("Passwords do not match")
+      toast.error("Passwords do not match");
+    } else {
+      const userData = {
+        name,
+        email,
+        password,
+      }
+
+      dispatch(register(userData))
     }
-  }
+  };
 
   return (
     <>
@@ -89,9 +104,15 @@ const Register = () => {
               required
             />
             {showPassword ? (
-              <AiFillEyeInvisible className="showPassword-icon" onClick={() => setShowPassword(prevState => !prevState)} />
+              <AiFillEyeInvisible
+                className="showPassword-icon"
+                onClick={() => setShowPassword(prevState => !prevState)}
+              />
             ) : (
-              <MdVisibility className="showPassword-icon" onClick={() => setShowPassword(prevState => !prevState)} />
+              <MdVisibility
+                className="showPassword-icon"
+                onClick={() => setShowPassword(prevState => !prevState)}
+              />
             )}
           </div>
           <div className="form-group">
