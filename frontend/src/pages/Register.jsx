@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 
 import { register, reset } from "../features/auth/authSlice";
+import { Spinner } from "../components";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,16 +27,16 @@ const Register = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(message)
+      toast.error(message);
     }
 
     // Redirect when logged in
     if (isSuccess || user) {
-      navigate("/")
+      navigate("/");
     }
 
-    dispatch(reset())
-  }, [dispatch, isError, isSuccess, message, navigate, user])
+    dispatch(reset());
+  }, [dispatch, isError, isSuccess, message, navigate, user]);
 
   const onChange = e => {
     setFormData(prevState => ({
@@ -54,11 +55,15 @@ const Register = () => {
         name,
         email,
         password,
-      }
+      };
 
-      dispatch(register(userData))
+      dispatch(register(userData));
     }
   };
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return (
     <>
