@@ -136,6 +136,24 @@ h3 {
   margin: 0 0 5px 3px;
 }
 
+.showPassword {
+  position: relative;
+  display: flex;
+  align-items: center;
+  
+}
+
+.showPassword-icon {
+  position: absolute;
+  right: 0;
+  margin-right: 1rem;
+  margin-bottom: .5rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  
+  
+}
+
 .btn {
   padding: 10px 20px;
   border: 1px solid #000;
