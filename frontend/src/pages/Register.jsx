@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { MdVisibility } from "react-icons/md";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 
-import { register } from "../features/auth/authSlice";
+import { register, reset } from "../features/auth/authSlice";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,8 +20,22 @@ const Register = () => {
   const { name, email, password, passwordConfirm } = formData;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { user, isLoading, isSuccess, message } = useSelector(state => state.auth);
+  const { user, isLoading, isSuccess, isError, message } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    // Redirect when logged in
+    if (isSuccess || user) {
+      navigate("/")
+    }
+
+    dispatch(reset())
+  }, [dispatch, isError, isSuccess, message, navigate, user])
 
   const onChange = e => {
     setFormData(prevState => ({
