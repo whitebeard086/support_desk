@@ -3,11 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { getTicket, reset, closeTicket } from "../features/tickets/ticketSlice";
-import { BackButton, Spinner } from "../components";
+import { getTicket, closeTicket } from "../features/tickets/ticketSlice";
+import { getNotes, reset as NoteReset } from "../features/notes/noteSlice";
+import { BackButton, Spinner, NoteItem } from "../components";
 
 const Ticket = () => {
   const { ticket, isLoading, isSuccess, isError, message } = useSelector(state => state.tickets);
+
+  const { notes, isLoading: notesIsLoading } = useSelector(state => state.notes);
 
   const params = useParams();
   const dispatch = useDispatch();
@@ -20,6 +23,7 @@ const Ticket = () => {
     }
 
     dispatch(getTicket(ticketId));
+    dispatch(getNotes(ticketId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isError, message, ticketId]);
 
@@ -30,7 +34,7 @@ const Ticket = () => {
     navigate("/tickets");
   };
 
-  if (isLoading) {
+  if (isLoading || notesIsLoading) {
     return <Spinner />;
   }
   if (isError) {
@@ -46,15 +50,18 @@ const Ticket = () => {
           <span className={`status status-${ticket.status}`}>{ticket.status}</span>
         </h2>
         <h3>Date Submitted: {new Date(ticket.createdAt).toLocaleString("en-US")}</h3>
-        <h3>
-            Product: {ticket.product}
-        </h3>
+        <h3>Product: {ticket.product}</h3>
         <hr />
         <div className="ticket-desc">
           <h3>Description</h3>
           <p>{ticket.description}</p>
         </div>
+        <h2>Notes</h2>
       </header>
+
+      {notes.map((note) => (
+        <NoteItem key={note._id} note={note} />
+      ))}
 
       {ticket.status !== "closed" && (
         <button onClick={onTicketClose} className="btn btn-block btn-danger">
